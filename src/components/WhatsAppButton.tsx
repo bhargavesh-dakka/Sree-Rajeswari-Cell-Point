@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 const WhatsAppButton = () => {
-  const [isHovered, setIsHovered] = useState(false);
+  const [hoveredButton, setHoveredButton] = useState<string | null>(null);
 
   const whatsappNumber = "918978591926";
   const defaultMessage = "Hi! I'm interested in your mobile services. Can you help me?";
@@ -10,17 +10,47 @@ const WhatsAppButton = () => {
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(defaultMessage)}`;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-4 items-center">
+      {/* Location Button */}
+      <a
+        href="https://maps.google.com/?q=Sree+Rajeswari+Cell+Point"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
+        onMouseEnter={() => setHoveredButton("location")}
+        onMouseLeave={() => setHoveredButton(null)}
+      >
+        <div className="relative flex items-center justify-center">
+          <div className="bg-white-500 hover:bg-red-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110">
+            <img
+              src="/location.svg"
+              alt="Location"
+              className="w-15 h-10"
+            />
+          </div>
+          {hoveredButton === "location" && (
+            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 w-48 bg-gray-800 text-white text-sm rounded-lg p-3 shadow-lg">
+              <div className="text-center">
+                <p className="font-medium">Visit our location!</p>
+                <p className="text-xs text-gray-300 mt-1">Open in Google Maps</p>
+              </div>
+              <div className="absolute left-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-gray-800"></div>
+            </div>
+          )}
+          <div className="absolute inset-0 rounded-full bg-red-500 animate-ping opacity-20"></div>
+        </div>
+      </a>
+
+      {/* WhatsApp Button */}
       <a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="block"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={() => setHoveredButton("whatsapp")}
+        onMouseLeave={() => setHoveredButton(null)}
       >
-        <div className="relative">
-          {/* WhatsApp Button */}
+        <div className="relative flex items-center justify-center">
           <div className="bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110">
             <svg
               className="w-8 h-8"
@@ -32,19 +62,16 @@ const WhatsAppButton = () => {
             </svg>
           </div>
 
-          {/* Tooltip */}
-          {isHovered && (
-            <div className="absolute bottom-full right-0 mb-2 w-48 bg-gray-800 text-white text-sm rounded-lg p-3 shadow-lg">
+          {hoveredButton === "whatsapp" && (
+            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 w-48 bg-gray-800 text-white text-sm rounded-lg p-3 shadow-lg">
               <div className="text-center">
                 <p className="font-medium">Chat with us!</p>
                 <p className="text-xs text-gray-300 mt-1">+91 8978591926</p>
               </div>
-              {/* Arrow */}
-              <div className="absolute top-full right-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+              <div className="absolute left-full top-1/2 -translate-y-1/2 w-0 h-0 border-t-4 border-b-4 border-l-4 border-transparent border-l-gray-800"></div>
             </div>
           )}
 
-          {/* Pulse effect */}
           <div className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-20"></div>
         </div>
       </a>
